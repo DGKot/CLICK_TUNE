@@ -1,0 +1,34 @@
+name: CLICK_CI
+
+on:
+  push:
+    branches:
+      - '**'
+
+env:
+  GO111MODULE: "on"
+  GO_VERSION: "1.23"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env. GO_VERSION }}
+
+      - name: Install golangci-lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: latest
+
+      - name: Run linters
+        run: make lint
+
+      - name: Run tests
+        run: make test
